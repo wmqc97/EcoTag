@@ -1,9 +1,9 @@
 {
   "type": "widget",
   "minVersion": 99,
-  "name": "能效标识（主题版）",
+  "name": "EcoTag（主题版）",
   "business_setup": {
-    "id": "energy_label_theme",
+    "id": "ecotag",
     "renameable": true
   }
 }
