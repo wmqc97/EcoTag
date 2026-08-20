@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<WidgetConfig version="1" author="唯梦倾城" name="能效标识_v2.1" description="小米背屏MAML主题【能效标识 v2.1】&#10;复刻家电能效标签视觉风格，根据电池电量自动显示1～5级能效等级。&#10;同时展示剩余存储空间、内存占用、系统开机时长和今日步数。&#10;支持电量胶囊与亮屏充电连续流光动画，支持AOD常亮。&#10;自动适配 Pro / Pro Max 双机型（宽高比判断）。&#10;可在变量设置中自定义标题、副标题及隐藏电量胶囊。&#10;v2.1 更新：精简胶囊代码、修复AOD状态机与语法错误、熄屏省电优化。">
+<WidgetConfig version="1" author="唯梦倾城" name="能效标识" des="能效标识主题组件 v2.1" description="小米背屏 MAML 主题 · 能效标识 v2.1&#10;复刻家电能效标签视觉风格，根据电池电量自动显示 1~5 级能效等级。&#10;同时展示剩余存储空间、内存占用、系统开机时长和今日步数。&#10;支持电量胶囊与亮屏充电连续流光动画，支持 AOD 常亮。&#10;自动适配 Pro / Pro Max 双机型（宽高比判断）。&#10;可在变量设置中自定义标题、副标题及隐藏电量胶囊。&#10;v2.1 更新：精简胶囊代码、修复 AOD 状态机与语法错误、熄屏省电优化。">
   <OnOff name="hideCapsule" displayTitle="隐藏电量胶囊" default="0">
     <Language displayTitle="Hide battery capsule" locale="en_US"/>
     <Language displayTitle="隐藏电量胶囊" locale="zh_CN"/>
