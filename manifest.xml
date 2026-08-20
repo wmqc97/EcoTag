@@ -1,0 +1,330 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Widget frameRate="0" scaleByDensity="false" screenWidth="1080" version="2" useVariableUpdater="Battery,DateTime.Second">
+  <!-- AOD -->
+  <Var name="aodState" type="number"/>
+  <Var name="__isAod" expression="#aodState==0"/>
+
+  <!-- 缩放 -->
+  <Var name="s" type="number" expression="(#view_width / 336)"/>
+  <Var name="scale" type="number" expression="(#view_width / 336)"/>
+  <Var name="font_path" type="string" expression="'/system/fonts/MiSansVF.ttf'" const="true"/>
+
+  <!-- ===================== 固定文字 ===================== -->
+  <Var name="labelTitle" type="string" expression="ifelse(strIsEmpty(@customTitle),'Xiao Mi 能效标识',@customTitle)"/>
+  <Var name="labelSubtitle" type="string" expression="ifelse(strIsEmpty(@customSubtitle),'PHONE ENERGY LABEL',@customSubtitle)"/>
+  <Var name="lowText" type="string" expression="'耗能低'" const="true"/>
+  <Var name="mediumText" type="string" expression="'中等'" const="true"/>
+  <Var name="highText" type="string" expression="'耗能高'" const="true"/>
+  <Var name="level1Text" type="string" expression="'1'" const="true"/>
+  <Var name="level2Text" type="string" expression="'2'" const="true"/>
+  <Var name="level3Text" type="string" expression="'3'" const="true"/>
+  <Var name="level4Text" type="string" expression="'4'" const="true"/>
+  <Var name="level5Text" type="string" expression="'5'" const="true"/>
+  <Var name="manufacturerLabel" type="string" expression="'剩余存储：'" const="true"/>
+  <Var name="modelLabel" type="string" expression="'开机时长：'" const="true"/>
+  <Var name="uptimeMs" type="number" expression="#time"/>
+  <Var name="uptimeText" type="string" expression="
+    ifelse(ge(#uptimeMs,86400000),
+      int(#uptimeMs/86400000)+'天'+int((#uptimeMs%86400000)/3600000)+'小时'+int((#uptimeMs%3600000)/60000)+'分'+int((#uptimeMs%60000)/1000)+'秒',
+    ifelse(ge(#uptimeMs,3600000),
+      int(#uptimeMs/3600000)+'小时'+int((#uptimeMs%3600000)/60000)+'分'+int((#uptimeMs%60000)/1000)+'秒',
+    ifelse(ge(#uptimeMs,60000),
+      int(#uptimeMs/60000)+'分'+int((#uptimeMs%60000)/1000)+'秒',
+      int(#uptimeMs/1000)+'秒'))))"/>
+  <Var name="currentLabel" type="string" expression="'内存占用：'" const="true"/>
+  <Var name="powerLabel" type="string" expression="'今日步数：'" const="true"/>
+
+  <!-- ✅ 开关读取逻辑（保持原样） -->
+  <Var name="showCapsule_v" type="number" expression="ifelse(#hideCapsule == 1, 0, 1)"/>
+
+  <!-- ===================== 存储数据 ===================== -->
+  <Var name="__availableSpace" expression="ifelse(ge(#_availableSpace,pow(1000,4)), preciseeval('#_availableSpace/pow(1000,4)',ifelse(ge(#__availableSpace,1000),0,ge(#__availableSpace,100),1,2)),ge(#_availableSpace,pow(1000,3)), preciseeval('#_availableSpace/pow(1000,3)',ifelse(ge(#__availableSpace,1000),0,ge(#__availableSpace,100),1,2)) ,preciseeval('#_availableSpace/pow(1000,2)',ifelse(ge(#__availableSpace,1000),0,ge(#__availableSpace,100),1,2)))" type="number" />
+  <Var name="__availableSpace_dw" expression="ifelse(ge(#_availableSpace,pow(1000,4)), 'TB' ,ge(#_availableSpace,pow(1000,3)), 'GB' , 'MB')" type="string" />
+  <Var name="manufacturerText" type="string" expression="#__availableSpace+' '+@__availableSpace_dw"/>
+
+  <!-- ===================== 内存数据 ===================== -->
+  <Var name="__memoryOccupied" expression="ifelse(ge(#_memoryOccupied,pow(1000,4)), preciseeval('#_memoryOccupied/pow(1000,4)',ifelse(ge(#__memoryOccupied,1000),0,ge(#__memoryOccupied,100),1,2)) , ge(#_memoryOccupied,pow(1000,3)), preciseeval('#_memoryOccupied/pow(1000,3)',ifelse(ge(#__memoryOccupied,1000),0,ge(#__memoryOccupied,100),1,2)) , preciseeval('#_memoryOccupied/pow(1000,2)',ifelse(ge(#__memoryOccupied,1000),0,ge(#__memoryOccupied,100),1,2)) )" type="number" />
+  <Var name="__memoryOccupied_dw" expression="ifelse(ge(#_memoryOccupied,pow(1000,4)), 'TB' , ge(#_memoryOccupied,pow(1000,3)), 'GB' , 'MB')" type="string" />
+  <Var name="memoryText" type="string" expression="#__memoryOccupied+' '+@__memoryOccupied_dw"/>
+
+  <!-- ===================== 步数数据===================== -->
+  <Var name="_MiSteps_steps" expression="ifelse(ge(#MiSteps_steps,10000),preciseeval('#MiSteps_steps/10000',2),ge(#MiSteps_steps,1000),preciseeval('#MiSteps_steps/1000',2),preciseeval('#MiSteps_steps',0))" type="number"/>
+  <Var name="_MiSteps_steps_dw" expression="ifelse(ge(#MiSteps_steps,10000), '万步' ,ge(#MiSteps_steps,1000), '千步' , '步' )" type="string"/>
+  <Var name="stepsText" type="string" expression="#_MiSteps_steps+' '+@_MiSteps_steps_dw"/>
+
+  <!-- ===================== 能效等级 ===================== -->
+  <Var name="gradeIndex" type="number" expression="ifelse(gt(#batteryLevel,80),1,gt(#batteryLevel,60),2,gt(#batteryLevel,40),3,gt(#batteryLevel,20),4,5)"/>
+  <Var name="gradeText" type="string" expression="ifelse(gt(#batteryLevel,80),'1级',gt(#batteryLevel,60),'2级',gt(#batteryLevel,40),'3级',gt(#batteryLevel,20),'4级','5级')"/>
+  <Var name="grade1Visible" type="number" expression="ifelse(gt(#batteryLevel,80),1,0)"/>
+  <Var name="grade2Visible" type="number" expression="ifelse(gt(#batteryLevel,60) * le(#batteryLevel,80),1,0)"/>
+  <Var name="grade3Visible" type="number" expression="ifelse(gt(#batteryLevel,40) * le(#batteryLevel,60),1,0)"/>
+  <Var name="grade4Visible" type="number" expression="ifelse(gt(#batteryLevel,20) * le(#batteryLevel,40),1,0)"/>
+  <Var name="grade5Visible" type="number" expression="ifelse(le(#batteryLevel,20),1,0)"/>
+
+  <!-- ===================== 自动刷新触发器 ===================== -->
+  <Var name="autoRefreshTrigger" expression="#second" threshold="1">
+    <Trigger>
+      <FunctionCommand target="checkTick"/>
+    </Trigger>
+  </Var>
+
+  <!-- ===================== 胶囊电池 ===================== -->
+  <Var name="isProMax" type="number" expression="ifelse(gt(#view_width/#view_height,1.6),1,0)"/>
+  <Var name="isPro" type="number" expression="(1 - #isProMax)"/>
+  <Var name="_scale" type="number" expression="(#view_width / 1080)"/>
+  <Var name="x_left" type="number" expression="ifelse(#isProMax,320,350)*#_scale"/>
+  <Var name="capW" type="number" expression="(#x_left / #scale - 2)"/>
+  <Var name="capH" type="number" expression="(#view_height / #scale - 2 - 5 / #scale)"/>
+  <Var name="capR" type="number" expression="(#capW / 2)"/>
+  <!-- 电量文字 X 坐标（按机型设置：ProMax 居中，Pro 左右分） -->
+  <Var name="capX_center" type="number" expression="(#capR * #scale)"/>
+  <Var name="capX_icon"   type="number" expression="ifelse(#isProMax,#capR*#scale,#capW*#scale*0.24)"/>
+  <Var name="capX_num"    type="number" expression="ifelse(#isProMax,#capR*#scale,#capW*#scale*0.76)"/>
+  <Var name="ringColor" type="string" expression="ifelse(le(#batteryLevel,15),'#FF4444',le(#batteryLevel,30),'#FF8C00',le(#batteryLevel,60),'#FFD54F','#4CAF50')"/>
+  <Var name="chargeAnim" type="number" expression="0">
+    <VariableAnimation initPause="true" loop="true">
+      <Item value="0" time="0"/>
+      <Item value="360" time="2000"/>
+    </VariableAnimation>
+  </Var>
+  <Var name="seg1" type="number" expression="(3.14159 * #capR / 2)"/>
+  <Var name="segL" type="number" expression="(#capH - #capW)"/>
+  <Var name="seg3" type="number" expression="(3.14159 * #capR)"/>
+  <Var name="e1" type="number" expression="#seg1"/>
+  <Var name="e2" type="number" expression="(#e1 + #segL)"/>
+  <Var name="e3" type="number" expression="(#e2 + #seg3)"/>
+  <Var name="e4" type="number" expression="(#e3 + #segL)"/>
+  <Var name="capPerim" type="number" expression="(#e4 + #seg1)"/>
+  <Var name="capPathT" type="number" expression="max(0,min(#capPerim,#capPerim*#batteryLevel/100))"/>
+  <Var name="breathAlpha" type="number" expression="255"/>
+  <Var name="chargeFlowVisible" type="number" expression="ifelse(eqs(@aod_desk_state,'1'), 0, ifelse(#aodState == 0, 0, ifelse(#batteryPlugType } 0, 1, 0)))"/>
+
+  <Var name="chargePos" type="number" expression="(#chargeAnim / 360 * #capPerim)"/>
+  <Var name="chargeTrailLen" type="number" expression="max(18,#capPerim * 0.18)"/>
+  <Var name="chargeTail" type="number" expression="(#chargePos - #chargeTrailLen)"/>
+  <Var name="dashA0" type="number" expression="max(0,#chargeTail)"/>
+  <Var name="dashA1" type="number" expression="#chargePos"/>
+  <Var name="dashB0" type="number" expression="ifelse(lt(#chargeTail,0),#chargeTail + #capPerim,#capPerim)"/>
+  <Var name="dashB1" type="number" expression="#capPerim"/>
+
+  <!-- ==================== 函数 ==================== -->
+  <Function name="updateGrade">
+    <VariableCommand name="gradeIndex" expression="ifelse(gt(#batteryLevel,80),1,gt(#batteryLevel,60),2,gt(#batteryLevel,40),3,gt(#batteryLevel,20),4,5)" type="number"/>
+    <VariableCommand name="gradeText" expression="ifelse(gt(#batteryLevel,80),'1级',gt(#batteryLevel,60),'2级',gt(#batteryLevel,40),'3级',gt(#batteryLevel,20),'4级','5级')" type="string"/>
+    <VariableCommand name="grade1Visible" expression="ifelse(gt(#batteryLevel,80),1,0)" type="number"/>
+    <VariableCommand name="grade2Visible" expression="ifelse(gt(#batteryLevel,60) * le(#batteryLevel,80),1,0)" type="number"/>
+    <VariableCommand name="grade3Visible" expression="ifelse(gt(#batteryLevel,40) * le(#batteryLevel,60),1,0)" type="number"/>
+    <VariableCommand name="grade4Visible" expression="ifelse(gt(#batteryLevel,20) * le(#batteryLevel,40),1,0)" type="number"/>
+    <VariableCommand name="grade5Visible" expression="ifelse(le(#batteryLevel,20),1,0)" type="number"/>
+  </Function>
+
+  <Function name="updateChargeAnim">
+    <IfCommand ifCondition="((#batteryPlugType } 0) * (#aodState == 1))">
+      <Consequent>
+        <AnimationCommand target="chargeAnim" command="play"/>
+        <FrameRateCommand rate="60"/>
+      </Consequent>
+      <Alternate>
+        <AnimationCommand target="chargeAnim" command="pause"/>
+        <VariableCommand name="chargeAnim" expression="0" type="number"/>
+        <FrameRateCommand rate="0"/>
+      </Alternate>
+    </IfCommand>
+  </Function>
+
+  <Function name="checkTick">
+    <!-- AOD 门控：熄屏时不刷新数据 -->
+    <IfCommand ifCondition="(#aodState == 1)">
+      <Consequent>
+        <BinderCommand name="getStorageData" command="refresh"/>
+        <BinderCommand name="getMemoryData" command="refresh"/>
+        <BinderCommand name="MiSteps" command="refresh"/>
+      </Consequent>
+    </IfCommand>
+  </Function>
+
+  <!-- ==================== UI 布局 ==================== -->
+  <Rectangle x="(116 * #s)" y="(10 * #s)" w="(210 * #s)" h="(185 * #s)" fillColor="#4A86ED" cornerRadiusExp="(27 * #s)"/>
+  <Text x="(221 * #s)" y="(15 * #s)" size="(13 * #s)" fontPath="@font_path" textExp="@labelTitle" fontPathWeight="650" color="#FFFFFF" align="center"/>
+  <Text x="(221 * #s)" y="(30 * #s)" size="(7 * #s)" fontPath="@font_path" textExp="@labelSubtitle" fontPathWeight="600" color="#FFFFFF" align="center"/>
+  <Rectangle x="(123 * #s)" y="(44 * #s)" w="(196 * #s)" h="(104 * #s)" fillColor="#FFFFFF" cornerRadiusExp="(16 * #s)"/>
+
+  <Text x="(136 * #s)" y="(57 * #s)" size="(8 * #s)" fontPath="@font_path" textExp="@lowText" fontPathWeight="650" color="#101010" alignV="center"/>
+  <Text x="(136 * #s)" y="(85 * #s)" size="(8 * #s)" fontPath="@font_path" textExp="@mediumText" fontPathWeight="650" color="#101010" alignV="center"/>
+  <Text x="(136 * #s)" y="(113 * #s)" size="(8 * #s)" fontPath="@font_path" textExp="@highText" fontPathWeight="650" color="#101010" alignV="center"/>
+
+  <!-- 箭头1-5 -->
+  <Rectangle x="(176.5 * #s)" y="(53.5 * #s)" w="(7 * #s)" h="(7 * #s)" fillColor="#2F7B39" rotation="45" pivotX="(3.5 * #s)" pivotY="(3.5 * #s)"/>
+  <Rectangle x="(165 * #s)" y="(52 * #s)" w="(16 * #s)" h="(10 * #s)" fillColor="#2F7B39" cornerRadiusExp="(2 * #s)"/>
+  <Text x="(176 * #s)" y="(57 * #s)" size="(8 * #s)" fontPath="@font_path" textExp="@level1Text" fontPathWeight="700" color="#FFFFFF" align="center" alignV="center"/>
+  <Rectangle x="(187.5 * #s)" y="(67.5 * #s)" w="(7 * #s)" h="(7 * #s)" fillColor="#5EDC16" rotation="45" pivotX="(3.5 * #s)" pivotY="(3.5 * #s)"/>
+  <Rectangle x="(165 * #s)" y="(66 * #s)" w="(27 * #s)" h="(10 * #s)" fillColor="#5EDC16" cornerRadiusExp="(2 * #s)"/>
+  <Text x="(182 * #s)" y="(71 * #s)" size="(8 * #s)" fontPath="@font_path" textExp="@level2Text" fontPathWeight="700" color="#FFFFFF" align="center" alignV="center"/>
+  <Rectangle x="(198.5 * #s)" y="(81.5 * #s)" w="(7 * #s)" h="(7 * #s)" fillColor="#FFB318" rotation="45" pivotX="(3.5 * #s)" pivotY="(3.5 * #s)"/>
+  <Rectangle x="(165 * #s)" y="(80 * #s)" w="(38 * #s)" h="(10 * #s)" fillColor="#FFB318" cornerRadiusExp="(2 * #s)"/>
+  <Text x="(188 * #s)" y="(85 * #s)" size="(8 * #s)" fontPath="@font_path" textExp="@level3Text" fontPathWeight="700" color="#FFFFFF" align="center" alignV="center"/>
+  <Rectangle x="(209.5 * #s)" y="(95.5 * #s)" w="(7 * #s)" h="(7 * #s)" fillColor="#F25113" rotation="45" pivotX="(3.5 * #s)" pivotY="(3.5 * #s)"/>
+  <Rectangle x="(165 * #s)" y="(94 * #s)" w="(49 * #s)" h="(10 * #s)" fillColor="#F25113" cornerRadiusExp="(2 * #s)"/>
+  <Text x="(194 * #s)" y="(99 * #s)" size="(8 * #s)" fontPath="@font_path" textExp="@level4Text" fontPathWeight="700" color="#FFFFFF" align="center" alignV="center"/>
+  <Rectangle x="(220.5 * #s)" y="(109.5 * #s)" w="(7 * #s)" h="(7 * #s)" fillColor="#DC0B14" rotation="45" pivotX="(3.5 * #s)" pivotY="(3.5 * #s)"/>
+  <Rectangle x="(165 * #s)" y="(108 * #s)" w="(60 * #s)" h="(10 * #s)" fillColor="#DC0B14" cornerRadiusExp="(2 * #s)"/>
+  <Text x="(200 * #s)" y="(113 * #s)" size="(8 * #s)" fontPath="@font_path" textExp="@level5Text" fontPathWeight="700" color="#FFFFFF" align="center" alignV="center"/>
+
+  <!-- 当前等级指示 -->
+  <Group visibility="#grade1Visible">
+    <Rectangle x="(285.5 * #s)" y="(53.5 * #s)" w="(7 * #s)" h="(7 * #s)" fillColor="#2F7B39" rotation="45" pivotX="(3.5 * #s)" pivotY="(3.5 * #s)"/>
+    <Rectangle x="(288 * #s)" y="(52 * #s)" w="(22 * #s)" h="(10 * #s)" fillColor="#2F7B39" cornerRadiusExp="(2 * #s)"/>
+    <Text x="(299 * #s)" y="(57 * #s)" size="(8 * #s)" fontPath="@font_path" textExp="@gradeText" fontPathWeight="700" color="#FFFFFF" align="center" alignV="center"/>
+  </Group>
+  <Group visibility="#grade2Visible">
+    <Rectangle x="(285.5 * #s)" y="(67.5 * #s)" w="(7 * #s)" h="(7 * #s)" fillColor="#5EDC16" rotation="45" pivotX="(3.5 * #s)" pivotY="(3.5 * #s)"/>
+    <Rectangle x="(288 * #s)" y="(66 * #s)" w="(22 * #s)" h="(10 * #s)" fillColor="#5EDC16" cornerRadiusExp="(2 * #s)"/>
+    <Text x="(299 * #s)" y="(71 * #s)" size="(8 * #s)" fontPath="@font_path" textExp="@gradeText" fontPathWeight="700" color="#FFFFFF" align="center" alignV="center"/>
+  </Group>
+  <Group visibility="#grade3Visible">
+    <Rectangle x="(285.5 * #s)" y="(81.5 * #s)" w="(7 * #s)" h="(7 * #s)" fillColor="#FFB318" rotation="45" pivotX="(3.5 * #s)" pivotY="(3.5 * #s)"/>
+    <Rectangle x="(288 * #s)" y="(80 * #s)" w="(22 * #s)" h="(10 * #s)" fillColor="#FFB318" cornerRadiusExp="(2 * #s)"/>
+    <Text x="(299 * #s)" y="(85 * #s)" size="(8 * #s)" fontPath="@font_path" textExp="@gradeText" fontPathWeight="700" color="#FFFFFF" align="center" alignV="center"/>
+  </Group>
+  <Group visibility="#grade4Visible">
+    <Rectangle x="(285.5 * #s)" y="(95.5 * #s)" w="(7 * #s)" h="(7 * #s)" fillColor="#F25113" rotation="45" pivotX="(3.5 * #s)" pivotY="(3.5 * #s)"/>
+    <Rectangle x="(288 * #s)" y="(94 * #s)" w="(22 * #s)" h="(10 * #s)" fillColor="#F25113" cornerRadiusExp="(2 * #s)"/>
+    <Text x="(299 * #s)" y="(99 * #s)" size="(8 * #s)" fontPath="@font_path" textExp="@gradeText" fontPathWeight="700" color="#FFFFFF" align="center" alignV="center"/>
+  </Group>
+  <Group visibility="#grade5Visible">
+    <Rectangle x="(285.5 * #s)" y="(109.5 * #s)" w="(7 * #s)" h="(7 * #s)" fillColor="#DC0B14" rotation="45" pivotX="(3.5 * #s)" pivotY="(3.5 * #s)"/>
+    <Rectangle x="(288 * #s)" y="(108 * #s)" w="(22 * #s)" h="(10 * #s)" fillColor="#DC0B14" cornerRadiusExp="(2 * #s)"/>
+    <Text x="(299 * #s)" y="(113 * #s)" size="(8 * #s)" fontPath="@font_path" textExp="@gradeText" fontPathWeight="700" color="#FFFFFF" align="center" alignV="center"/>
+  </Group>
+
+  <!-- 剩余存储 + 开机时长 -->
+  <Text x="(136 * #s)" y="(125 * #s)" size="(7 * #s)" fontPath="@font_path" textExp="@manufacturerLabel" fontPathWeight="600" color="#101010"/>
+  <Text x="(308 * #s)" y="(125 * #s)" size="(7 * #s)" fontPath="@font_path" textExp="@manufacturerText" fontPathWeight="600" color="#101010" align="right"/>
+  <Text x="(136 * #s)" y="(136 * #s)" size="(7 * #s)" fontPath="@font_path" textExp="@modelLabel" fontPathWeight="600" color="#101010"/>
+  <Text x="(308 * #s)" y="(136 * #s)" size="(7 * #s)" fontPath="@font_path" textExp="@uptimeText" fontPathWeight="600" color="#101010" align="right"/>
+
+  <!-- 内存占用 + 今日步数 -->
+  <Rectangle x="(123 * #s)" y="(154 * #s)" w="(196 * #s)" h="(34 * #s)" fillColor="#FFFFFF" cornerRadiusExp="(15 * #s)"/>
+  <Rectangle x="(134 * #s)" y="(170 * #s)" w="(174 * #s)" h="(1 * #s)" fillColor="#D0D0D0"/>
+  <Text x="(136 * #s)" y="(158 * #s)" size="(7 * #s)" fontPath="@font_path" textExp="@currentLabel" fontPathWeight="600" color="#101010"/>
+  <Text x="(308 * #s)" y="(158 * #s)" size="(7 * #s)" fontPath="@font_path" textExp="@memoryText" fontPathWeight="650" color="#101010" align="right"/>
+  <Text x="(136 * #s)" y="(174 * #s)" size="(7 * #s)" fontPath="@font_path" textExp="@powerLabel" fontPathWeight="600" color="#101010"/>
+  <Text x="(308 * #s)" y="(174 * #s)" size="(7 * #s)" fontPath="@font_path" textExp="@stepsText" fontPathWeight="650" color="#101010" align="right"/>
+
+  <!-- =================== 胶囊电池 =================== -->
+  <Group x="(#scale + 2)" y="(#scale + 4)" visibility="(#showCapsule_v == 1)">
+    <Rectangle x="0" y="0" w="(#capW * #scale)" h="(#capH * #scale)" fillColor="#00000000" strokeColor="#2E4E63" weight="(2 * #scale)" cap="round" strokeAlign="center" cornerRadiusExp="#capR*#scale" alpha="153"/>
+    <Arc visibility="gt(#capPathT,0)" x="(#capR * #scale)" y="(#capR * #scale)" w="(#capW * #scale)" h="(#capW * #scale)" fillColor="#00000000" strokeColor="@ringColor" weight="(2 * #scale)" cap="round" strokeAlign="center" close="false" startAngle="-90" sweep="90*min(#seg1,max(0,#capPathT))/#seg1" alpha="#breathAlpha"/>
+    <Line visibility="gt(#capPathT,#e1)" x="(#capW * #scale)" y="(#capR * #scale)" x1="(#capW * #scale)" y1="((#capR+min(#segL,max(0,#capPathT-#e1)))*#scale)" strokeColor="@ringColor" weight="(2 * #scale)" cap="round" strokeAlign="center" alpha="#breathAlpha"/>
+    <Arc visibility="gt(#capPathT,#e2)" x="(#capR * #scale)" y="((#capH - #capR) * #scale)" w="(#capW * #scale)" h="(#capW * #scale)" fillColor="#00000000" strokeColor="@ringColor" weight="(2 * #scale)" cap="round" strokeAlign="center" close="false" startAngle="0" sweep="180*min(#seg3,max(0,#capPathT-#e2))/#seg3" alpha="#breathAlpha"/>
+    <Line visibility="gt(#capPathT,#e3)" x="0" y="((#capH - #capR) * #scale)" x1="0" y1="((#capH-#capR-min(#segL,max(0,#capPathT-#e3)))*#scale)" strokeColor="@ringColor" weight="(2 * #scale)" cap="round" strokeAlign="center" alpha="#breathAlpha"/>
+    <Arc visibility="gt(#capPathT,#e4)" x="(#capR * #scale)" y="(#capR * #scale)" w="(#capW * #scale)" h="(#capW * #scale)" fillColor="#00000000" strokeColor="@ringColor" weight="(2 * #scale)" cap="round" strokeAlign="center" close="false" startAngle="180" sweep="90*min(#seg1,max(0,#capPathT-#e4))/#seg1" alpha="#breathAlpha"/>
+
+    <!-- 充电流光 -->
+    <Group visibility="#chargeFlowVisible">
+      <Arc visibility="gt(min(#e1,#dashA1)-max(0,#dashA0),0)" x="(#capR*#scale)" y="(#capR*#scale)" w="(#capW*#scale)" h="(#capW*#scale)" fillColor="#00000000" strokeColor="#FFFFFF" weight="(3*#scale)" cap="butt" strokeAlign="center" close="false" startAngle="(-90 + 90 * max(0,#dashA0) / #seg1)" sweep="(90 * max(0,min(#e1,#dashA1)-max(0,#dashA0)) / #seg1)" alpha="220"/>
+      <Line visibility="gt(min(#e2,#dashA1)-max(#e1,#dashA0),0)" x="(#capW*#scale)" y="((#capR + max(#e1,#dashA0) - #e1)*#scale)" x1="(#capW*#scale)" y1="((#capR + min(#e2,#dashA1) - #e1)*#scale)" strokeColor="#FFFFFF" weight="(3*#scale)" cap="butt" strokeAlign="center" alpha="220"/>
+      <Arc visibility="gt(min(#e3,#dashA1)-max(#e2,#dashA0),0)" x="(#capR*#scale)" y="((#capH-#capR)*#scale)" w="(#capW*#scale)" h="(#capW*#scale)" fillColor="#00000000" strokeColor="#FFFFFF" weight="(3*#scale)" cap="butt" strokeAlign="center" close="false" startAngle="(180 * (max(#e2,#dashA0) - #e2) / #seg3)" sweep="(180 * max(0,min(#e3,#dashA1)-max(#e2,#dashA0)) / #seg3)" alpha="220"/>
+      <Line visibility="gt(min(#e4,#dashA1)-max(#e3,#dashA0),0)" x="0" y="((#capH - #capR - (max(#e3,#dashA0) - #e3))*#scale)" x1="0" y1="((#capH - #capR - (min(#e4,#dashA1) - #e3))*#scale)" strokeColor="#FFFFFF" weight="(3*#scale)" cap="butt" strokeAlign="center" alpha="220"/>
+      <Arc visibility="gt(min(#capPerim,#dashA1)-max(#e4,#dashA0),0)" x="(#capR*#scale)" y="(#capR*#scale)" w="(#capW*#scale)" h="(#capW*#scale)" fillColor="#00000000" strokeColor="#FFFFFF" weight="(3*#scale)" cap="butt" strokeAlign="center" close="false" startAngle="(180 + 90 * (max(#e4,#dashA0) - #e4) / #seg1)" sweep="(90 * max(0,min(#capPerim,#dashA1)-max(#e4,#dashA0)) / #seg1)" alpha="220"/>
+
+      <Arc visibility="gt(min(#e1,#dashB1)-max(0,#dashB0),0)" x="(#capR*#scale)" y="(#capR*#scale)" w="(#capW*#scale)" h="(#capW*#scale)" fillColor="#00000000" strokeColor="#FFFFFF" weight="(3*#scale)" cap="butt" strokeAlign="center" close="false" startAngle="(-90 + 90 * max(0,#dashB0) / #seg1)" sweep="(90 * max(0,min(#e1,#dashB1)-max(0,#dashB0)) / #seg1)" alpha="220"/>
+      <Line visibility="gt(min(#e2,#dashB1)-max(#e1,#dashB0),0)" x="(#capW*#scale)" y="((#capR + max(#e1,#dashB0) - #e1)*#scale)" x1="(#capW*#scale)" y1="((#capR + min(#e2,#dashB1) - #e1)*#scale)" strokeColor="#FFFFFF" weight="(3*#scale)" cap="butt" strokeAlign="center" alpha="220"/>
+      <Arc visibility="gt(min(#e3,#dashB1)-max(#e2,#dashB0),0)" x="(#capR*#scale)" y="((#capH-#capR)*#scale)" w="(#capW*#scale)" h="(#capW*#scale)" fillColor="#00000000" strokeColor="#FFFFFF" weight="(3*#scale)" cap="butt" strokeAlign="center" close="false" startAngle="(180 * (max(#e2,#dashB0) - #e2) / #seg3)" sweep="(180 * max(0,min(#e3,#dashB1)-max(#e2,#dashB0)) / #seg3)" alpha="220"/>
+      <Line visibility="gt(min(#e4,#dashB1)-max(#e3,#dashB0),0)" x="0" y="((#capH - #capR - (max(#e3,#dashB0) - #e3))*#scale)" x1="0" y1="((#capH - #capR - (min(#e4,#dashB1) - #e3))*#scale)" strokeColor="#FFFFFF" weight="(3*#scale)" cap="butt" strokeAlign="center" alpha="220"/>
+      <Arc visibility="gt(min(#capPerim,#dashB1)-max(#e4,#dashB0),0)" x="(#capR*#scale)" y="(#capR*#scale)" w="(#capW*#scale)" h="(#capW*#scale)" fillColor="#00000000" strokeColor="#FFFFFF" weight="(3*#scale)" cap="butt" strokeAlign="center" close="false" startAngle="(180 + 90 * (max(#e4,#dashB0) - #e4) / #seg1)" sweep="(90 * max(0,min(#capPerim,#dashB1)-max(#e4,#dashB0)) / #seg1)" alpha="220"/>
+    </Group>
+
+    <!-- Pro Max 机型 -->
+    <Text visibility="#isProMax"
+      x="(#capX_center)" y="(#capH / 2 * #scale)"
+      size="(10 * #scale)" fontPath="@font_path"
+      textExp="(ifelse(gt(#batteryPlugType,0),'⚡','') + #batteryLevel + '%')"
+      fontPathWeight="600" color="@ringColor" align="center" alignV="center"/>
+
+    <!-- Pro 机型 -->
+    <Text visibility="#isPro * gt(#batteryPlugType,0)"
+      x="(#capX_icon)" y="(#capH / 2 * #scale)"
+      size="(10 * #scale)" fontPath="@font_path"
+      textExp="'⚡'"
+      fontPathWeight="600" color="@ringColor" align="center" alignV="center"/>
+
+    <Text visibility="#isPro"
+      x="(#capX_num)" y="(#capH / 2 * #scale)"
+      size="(10 * #scale)" fontPath="@font_path"
+      textExp="#batteryLevel + '%'"
+      fontPathWeight="600" color="@ringColor" align="center" alignV="center"/>
+  </Group>
+
+  <!-- ==================== 数据绑定 ==================== -->
+  <VariableBinders>
+    <BroadcastBinder action="android.intent.action.BATTERY_CHANGED">
+      <Variable name="batteryLevel" type="int" extra="level"/>
+      <Variable name="batteryPlugType" type="int" extra="plugged"/>
+      <Trigger>
+        <FunctionCommand target="updateGrade"/>
+        <FunctionCommand target="updateChargeAnim"/>
+      </Trigger>
+    </BroadcastBinder>
+
+    <ContentProviderBinder name="getStorageData" uri="content://com.miui.securitycenter.widgetProvider/getCleanMasterData" columns="availableSpace,totalSpace" countName="hasStorageData">
+      <Variable name="_availableSpace" type="long" column="availableSpace"/>
+      <Variable name="_totalSpace" type="long" column="totalSpace"/>
+    </ContentProviderBinder>
+
+    <ContentProviderBinder name="getMemoryData" uri="content://com.miui.securitycenter.widgetProvider/getMemoryData" countName="hasGetMemoryData">
+      <Variable name="_memoryOccupied" type="long" column="memoryOccupied" />
+    </ContentProviderBinder>
+
+    <ContentProviderBinder name="MiSteps" uri="content://com.mi.health.provider.main/activity/steps/brief" column="steps,goal" countName="hasSteps">
+      <Variable name="MiSteps_steps" type="int" column="steps"/>
+      <Variable name="MiSteps_goal" type="int" column="goal"/>
+    </ContentProviderBinder>
+  </VariableBinders>
+
+  <!-- ==================== 事件触发（已修复开关） ==================== -->
+  <ExternalCommands>
+    <Trigger action="init">
+      <VariableCommand name="showCapsule_v" expression="ifelse(#hideCapsule == 1, 0, 1)" type="number"/>
+      <VariableCommand name="aodState" expression="1" type="number"/>
+      <BinderCommand name="getStorageData" command="refresh"/>
+      <BinderCommand name="getMemoryData" command="refresh"/>
+      <BinderCommand name="MiSteps" command="refresh"/>
+      <FunctionCommand target="updateChargeAnim"/>
+      <FunctionCommand target="updateGrade"/>
+    </Trigger>
+    <Trigger action="exitAod">
+      <VariableCommand name="showCapsule_v" expression="ifelse(#hideCapsule == 1, 0, 1)" type="number"/>
+      <VariableCommand name="aodState" expression="1" type="number"/>
+      <BinderCommand name="getStorageData" command="refresh"/>
+      <BinderCommand name="getMemoryData" command="refresh"/>
+      <BinderCommand name="MiSteps" command="refresh"/>
+      <FunctionCommand target="updateChargeAnim"/>
+      <FunctionCommand target="updateGrade"/>
+    </Trigger>
+    <Trigger action="resume">
+      <VariableCommand name="showCapsule_v" expression="ifelse(#hideCapsule == 1, 0, 1)" type="number"/>
+      <VariableCommand name="aodState" expression="1" type="number"/>
+      <BinderCommand name="getStorageData" command="refresh"/>
+      <BinderCommand name="getMemoryData" command="refresh"/>
+      <BinderCommand name="MiSteps" command="refresh"/>
+      <FunctionCommand target="updateChargeAnim"/>
+      <FunctionCommand target="updateGrade"/>
+    </Trigger>
+    <Trigger action="enterAod">
+      <VariableCommand name="aodState" expression="0" type="number"/>
+      <AnimationCommand target="chargeAnim" command="pause"/>
+      <VariableCommand name="chargeAnim" expression="0" type="number"/>
+      <FrameRateCommand rate="0"/>
+    </Trigger>
+    <Trigger action="pause">
+      <VariableCommand name="aodState" expression="0" type="number"/>
+      <AnimationCommand target="chargeAnim" command="pause"/>
+      <VariableCommand name="chargeAnim" expression="0" type="number"/>
+      <FrameRateCommand rate="0"/>
+    </Trigger>
+  </ExternalCommands>
+
+  <!-- AOD 蒙版 -->
+  <Rectangle x="0" y="0" w="#view_width" h="#view_height" fillColor="#000000" alpha="180" visibility="#__isAod"/>
+</Widget>
