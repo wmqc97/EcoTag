@@ -1,6 +1,4 @@
 # EcoTag（主题版） - REAREye 锁屏组件
-![Version](https://img.shields.io/badge/version-2.1-blue)
-![Author](https://img.shields.io/badge/author-唯梦倾城-orange)
 
 > 主题显示名：**能效标识** | 仓库名：EcoTag
 
