@@ -5,7 +5,7 @@
 复刻家电能效标签视觉风格的小米背屏 MAML 主题，根据电池电量自动显示 1～5 级能效等级。
 
 ## 预览
-![预览图](./effect.png)
+![预览图](https://raw.githubusercontent.com/wmqc97/EcoTag/main/effect.png)
 
 ## 功能
 - 🔋 **能效等级**：根据电池电量自动计算 1～5 级能效等级（>80% 为 1 级，≤20% 为 5 级）
