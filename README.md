@@ -18,17 +18,6 @@
 - 📱 **双机型适配**：自动适配 Pro / Pro Max 双机型（宽高比判断）
 - ⚙️ **可自定义**：标题文字、副标题文字、隐藏电量胶囊开关
 
-## 文件结构
-```
-├── manifest.xml        # MAML 主题布局文件（变量绑定、数据源、动画逻辑）
-├── var_config.xml      # 用户可配置变量（标题、副标题、胶囊开关）
-├── effect.png          # 预览图
-├── widget_info.json    # REAREye 组件仓库配置
-├── strings/            # 多语言资源（zh_CN）
-├── AGENTS.md           # 技术架构说明
-└── README.md
-```
-
 ## 安装
 在 REAREye 组件仓库安装，或通过 REAREye 手动导入主题包。
 
