@@ -43,7 +43,7 @@
   <Var name="manufacturerText" type="string" expression="#__availableSpace+' '+@__availableSpace_dw"/>
 
   <!-- ===================== 内存数据 ===================== -->
-  <Var name="__memoryOccupied" expression="ifelse(ge(#_memoryOccupied,pow(1000,4)), preciseeval('#_memoryOccupied/pow(1000,4)',ifelse(ge(#__memoryOccupied,1000),0,ge(#__memoryOccupied,100),1,2)) , ge(#_memoryOccupied,pow(1000,3)), preciseeval('#_memoryOccupied/pow(1000,3)',ifelse(ge(#__memoryOccupied,1000),0,ge(#__memoryOccupied,100),1,2)) , preciseeval('#_memoryOccupied/pow(1000,2)',ifelse(ge(#__memoryOccupied,1000),0,ge(#__memoryOccupied,100),1,2)) )" type="number" />
+  <Var name="__memoryOccupied" expression="ifelse(ge(#_memoryOccupied,pow(1000,4)), preciseeval('#_memoryOccupied/pow(1000,4)',ifelse(ge(#__memoryOccupied,1000),0,ge(#__memoryOccupied,100),1,2)) , ge(#_memoryOccupied,pow(1000,3)), preciseeval('#_memoryOccupied/pow(1000,3)',ifelse(ge(#__memoryOccupied,1000),0,ge(#__memoryOccupied,100),1,2)) , max(0,preciseeval('#_memoryOccupied/pow(1000,2)',ifelse(ge(#__memoryOccupied,1000),0,ge(#__memoryOccupied,100),1,2))) )" type="number" />
   <Var name="__memoryOccupied_dw" expression="ifelse(ge(#_memoryOccupied,pow(1000,4)), 'TB' , ge(#_memoryOccupied,pow(1000,3)), 'GB' , 'MB')" type="string" />
   <Var name="memoryText" type="string" expression="#__memoryOccupied+' '+@__memoryOccupied_dw"/>
 
