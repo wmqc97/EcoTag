@@ -12,7 +12,7 @@
 - 💾 **存储空间**：显示剩余存储空间
 - 🧠 **内存占用**：显示当前内存占用
 - ⏱️ **开机时长**：显示系统开机时长
-- 🚶 **今日步数**：显示今日步数（通过小米健康 ContentProvider）
+- 🚶 **今日步数**：显示今日步数
 - 💡 **电量胶囊**：胶囊电池 UI，支持充电流光动画（2 秒循环）
 - 🌙 **AOD 常亮**：支持熄屏显示，自动切换省电模式
 - 📱 **双机型适配**：自动适配 Pro / Pro Max 双机型（宽高比判断）
@@ -28,17 +28,6 @@
 ├── AGENTS.md           # 技术架构说明
 └── README.md
 ```
-
-## 数据来源
-本主题通过系统 ContentProvider 获取数据，**无需安装额外应用**：
-
-| 数据项 | 来源 |
-|--------|------|
-| 存储空间 | `content://com.miui.securitycenter.widgetProvider/getCleanMasterData` |
-| 内存占用 | 同存储空间，取 `memoryOccupied` 字段 |
-| 今日步数 | `content://com.mi.health.provider.main/activity/steps/brief` |
-| 电池电量 | 系统广播 `Battery` 变量更新器 |
-| 时间 | `DateTime.Second` 变量更新器 |
 
 ## 安装
 在 REAREye 组件仓库安装，或通过 REAREye 手动导入主题包。
