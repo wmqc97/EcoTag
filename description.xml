@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <theme>
-  <version><![CDATA[2.2]]></version>
+  <version><![CDATA[2.3]]></version>
   <uiVersion>12</uiVersion>
   <author><![CDATA[唯梦倾城]]></author>
   <designer><![CDATA[唯梦倾城]]></designer>
   <title><![CDATA[能效标识_主题版]]></title>
-  <description><![CDATA[小米背屏 MAML 主题 · 能效标识 v2.2
+  <description><![CDATA[小米背屏 MAML 主题 · 能效标识 v2.3
 复刻家电能效标签视觉风格，根据电池电量自动显示 1~5 级能效等级。
 同时展示剩余存储空间、内存占用、系统开机时长和今日步数。
 支持电量胶囊与亮屏充电连续流光动画，支持 AOD 常亮。
 自动适配 Pro / Pro Max 双机型（宽高比判断）。
 可在变量设置中自定义标题、副标题及隐藏电量胶囊。
-v2.2 更新：统一卡片类型为壁纸、更新版本号与文档。]]></description>
+v2.3 更新：修复内存扩展开启后内存占用显示负数；主题信息迁移至 description.xml。]]></description>
   <appName/>
   <typeTag></typeTag>
   <frame>0</frame>
@@ -21,12 +21,12 @@ v2.2 更新：统一卡片类型为壁纸、更新版本号与文档。]]></desc
   <authors><author locale="zh_CN"><![CDATA[唯梦倾城]]></author></authors>
   <designers><designer locale="zh_CN"><![CDATA[唯梦倾城]]></designer></designers>
   <titles><title locale="zh_CN"><![CDATA[能效标识_主题版]]></title></titles>
-  <descriptions><description locale="zh_CN"><![CDATA[小米背屏 MAML 主题 · 能效标识 v2.2
+  <descriptions><description locale="zh_CN"><![CDATA[小米背屏 MAML 主题 · 能效标识 v2.3
 复刻家电能效标签视觉风格，根据电池电量自动显示 1~5 级能效等级。
 同时展示剩余存储空间、内存占用、系统开机时长和今日步数。
 支持电量胶囊与亮屏充电连续流光动画，支持 AOD 常亮。
 自动适配 Pro / Pro Max 双机型（宽高比判断）。
 可在变量设置中自定义标题、副标题及隐藏电量胶囊。
-v2.2 更新：统一卡片类型为壁纸、更新版本号与文档。]]></description></descriptions>
+v2.3 更新：修复内存扩展开启后内存占用显示负数；主题信息迁移至 description.xml。]]></description></descriptions>
   <appNames/>
 </theme>
